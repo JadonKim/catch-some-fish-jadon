@@ -268,6 +268,7 @@ let fishingCat = sprites.create(img`
     `, SpriteKind.Player)
 tiles.placeOnTile(fishingCat, tiles.getTileLocation(0, 9))
 let fishImgs = [
+
 img`
     ..................
     ..................
@@ -499,3 +500,37 @@ let lureImg = img`
     . 2 2 c . c . . 
     . . . . c . . . 
     `
+let lure = sprites.create(img`
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+`, SpriteKind.Player)
+function introSequence(){
+    scene.cameraFollowSprite(lure)
+    
+    story.queueStoryPart(function() {
+    story.spriteMoveToLocation(lure, 80, 180, 30)    
+    })
+story.queueStoryPart(function() {
+lure.setImage(lureImg)   
+lure.startEffect(effects.bubbles, 500) 
+controller.moveSprite(lure,)
+lure.setVelocity(0, 50)
+})
+    
+}
+
+introSequence()
