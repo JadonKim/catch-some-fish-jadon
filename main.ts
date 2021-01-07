@@ -5,6 +5,7 @@ namespace SpriteKind {
 }
 scene.onOverlapTile(SpriteKind.CatchingLure, myTiles.transparency16, function (sprite, location) {
     sprite.vy = 0
+    checkCatch()
 })
 function introSequence () {
     scene.cameraFollowSprite(lure)
@@ -26,7 +27,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 sprites.onOverlap(SpriteKind.SwimmingFish, SpriteKind.CatchingLure, function (fish, player2) {
+    fish.x = player2.x
+    fish.y = player2.y
     fish.follow(player2, 180)
+    fish.setKind(SpriteKind.CaughtFish)
 })
 function spawnFish (numFish: number) {
     for (let index = 0; index < numFish; index++) {
@@ -44,9 +48,28 @@ function spawnFish (numFish: number) {
         leftImg = rightImg.clone()
         leftImg.flipX()
         sprites.setDataImage(newFish, "swim-right", rightImg)
-sprites.setDataImage(newFish, "swim-left", leftImg)
+        sprites.setDataImage(newFish, "swim-left", leftImg)
+
+        sprites.setDataNumber(newFish, "points", fishPoints[randomIndex])
     }
 }
+
+function checkCatch(){
+    let allCaught = sprites.allOfKind(SpriteKind.CaughtFish)
+
+    let sum = 0
+    for (let fish of allCaught){
+        sum += sprites.readDataNumber(fish, "points")
+    }
+    info.setScore(sum)
+    if (sum == 0){
+        game.over()
+    }
+    game.over(true)
+
+}
+
+
 let leftImg2: Image = null
 let rightImg2: Image = null
 let swimmingFish: Sprite[] = []
