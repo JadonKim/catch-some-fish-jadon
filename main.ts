@@ -8,6 +8,9 @@ scene.onOverlapTile(SpriteKind.CatchingLure, myTiles.transparency16, function (s
     checkCatch()
 })
 function introSequence () {
+    let introMessage = 'Help the cat catch some fish! You are a lure, press the space/A key to  reel in some fish!'
+    game.showLongText(introMessage, DialogLayout.Full)
+    
     scene.cameraFollowSprite(lure)
     story.queueStoryPart(function () {
         story.spriteMoveToLocation(lure, 80, 180, 30)
@@ -55,18 +58,38 @@ function spawnFish (numFish: number) {
 }
 
 function checkCatch(){
+    pause(500)    
+    lure.destroy()
     let allCaught = sprites.allOfKind(SpriteKind.CaughtFish)
 
     let sum = 0
     for (let fish of allCaught){
         sum += sprites.readDataNumber(fish, "points")
+        
+        story.queueStoryPart(function() {
+             story.spriteMoveToLocation(fish, 80, 160, 50)
+        })
+       
+        story.queueStoryPart(function() {
+            fish.say("" + sprites.readDataNumber(fish,"points"))
+        })
+        
+        story.queueStoryPart(function() {
+           pause(1000) 
+           fish.destroy() 
+        })
+        
     }
-    info.setScore(sum)
+
+    story.queueStoryPart(function() {
+       info.setScore(sum)
     if (sum == 0){
         game.over()
     }
     game.over(true)
-
+  
+    })
+   
 }
 
 
